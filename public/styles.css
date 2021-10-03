@@ -1,0 +1,76 @@
+input.call-picker {
+  border: 1px solid #AAA;
+  color: #666;
+  text-transform: uppercase;
+  float: left;
+  outline: none;
+  padding: 10px;
+  text-transform: uppercase;
+  width: 85px;
+}
+
+body{
+  touch-action: none;
+  overflow: hidden;
+
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+header label{
+  width: 32px;
+}
+
+
+.container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Checkbox hack to toggle nav visibility */
+#toggle:checked ~ nav {
+  margin-left: -15em;
+}
+#toggle ~ nav {
+  margin-left: 0;
+}
+
+#canvas {
+  flex: 1;
+  max-width: 960px;
+}
+
+input.stroke_width_picker {
+  border: 1px solid #AAA;
+  color: #666;
+  text-transform: uppercase;
+  float: left;
+  outline: none;
+  padding: 10px;
+  text-transform: uppercase;
+  width: 85px;
+  z-index: 1;
+}
+
+p {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  color: #DDD;
+}
+
+button {
+  margin-left: 1rem;
+}
+
+html, body {
+  height: 100%;
+  background-color: #373d55;
+  display: block
+}
