@@ -11,10 +11,11 @@ function setup() {
 	document.getElementsByTagName('canvas')[0].style.border = '1px solid black';
 	// Get ip from data-ip attribute on the body canvas
 	const ip = document.body.dataset.ip
+    const port = document.body.dataset.port
 
 
 	// Start the socket connection
-	socket = io.connect(`http://${ip}:3000`)
+	socket = io.connect(`http://${ip}:${port}`)
 
 	// Callback function
 	socket.on('mouse', data => {

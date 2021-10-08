@@ -1,18 +1,14 @@
 import http from 'http';
-import app from './app.js';
+import app, {config} from './app.js';
 import { Server } from "socket.io";
 import OBSWebSocket from 'obs-websocket-js';
-import fs from 'fs';
-//import dotenv
-import dotenv from 'dotenv'
 
-
-dotenv.config()
 var obs = new OBSWebSocket();
 
 // Try to connect to the obs websocket server, if not  retry the connection every 5 seconds until connected.
 const connectToOBS = () => {
-    obs.connect({ address: '192.168.1.236:4444', username: null, password: null })
+
+    obs.connect({ address: config.obsHost, username: config.obsUsername, password: config.obsPassword })
         .then(() => {
             console.log('Connected to OBS');
         })
@@ -35,7 +31,8 @@ const normalizePort = (val) => {
     }
     return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+
+const port = normalizePort(config.port || '3000');
 app.set('port', port);
 
 const errorHandler = (error) => {

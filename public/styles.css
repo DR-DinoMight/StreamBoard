@@ -1,12 +1,10 @@
 input.call-picker {
-  border: 1px solid #AAA;
-  color: #666;
   text-transform: uppercase;
   float: left;
   outline: none;
-  padding: 10px;
-  text-transform: uppercase;
-  width: 85px;
+  height: 3rem;
+  width: 90%;
+  margin-bottom: .5rem;
 }
 
 body{
@@ -19,12 +17,21 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 0 10px;
 }
 
+header h1{
+  margin: 0;
+  padding: 0;
+}
 header label{
   width: 32px;
+  cursor: pointer;
+  color: #fff;
 }
-
+header label:hover{
+  color: rgba(255, 255, 255, 0.678);
+}
 
 .container{
   display: flex;
@@ -53,20 +60,21 @@ input.stroke_width_picker {
   text-transform: uppercase;
   float: left;
   outline: none;
-  padding: 10px;
-  text-transform: uppercase;
-  width: 85px;
-  z-index: 1;
+  height: 3rem;
+  width: 90%;
+  margin-bottom: .5rem;
 }
 
 p {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  margin-bottom: .5rem;
   color: #DDD;
 }
 
 button {
-  margin-left: 1rem;
+  height: 3rem;
+  width: 90%;
+  margin-right: 10px;
 }
 
 html, body {

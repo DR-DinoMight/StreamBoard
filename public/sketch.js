@@ -6,6 +6,8 @@ let previousState;
 let db;
 let interactions = 0;
 let canvasElm;
+let autoFetching = false;
+let autoFetchingOnInterval;
 
 function setup() {
     // db = new PouchDB('sketch');
@@ -28,9 +30,10 @@ function setup() {
 
     // Get ip from data-ip attribute on the body canvas
     const ip = document.body.dataset.ip;
+    const port = document.body.dataset.port;
 
     // Start the socket connection
-    socket = io.connect(`http://${ip}:3000`);
+    socket = io.connect(`http://${ip}:${port}`);
 
     // Callback function
     socket.on('mouse', (data) => {
@@ -46,18 +49,62 @@ function setup() {
 
     const stream_preview = select('#stream-preview');
     stream_preview.mousePressed(() => {
-        // send socket request to the server wait for a response then set the body background to the base64 data
-        socket.emit('request-image');
-        socket.on('image', (data) => {
-            canvasElm.style.backgroundImage = `url(${data})`;
-            canvasElm.style.backgroundSize = 'cover';
-        });
+        fetchStreamPreview()
     });
 
     const clear_btn = select('#clear-btn');
     clear_btn.mousePressed(() => {
-        cv.clear();
         socket.emit('clear');
+        cv.clear();
+    });
+
+    const save_btn = select('#save-btn');
+    save_btn.mousePressed(() => {
+        fetchStreamPreview();
+        //get the background image style from canvasElm and save as a png
+        const data = canvasElm.style.backgroundImage;
+        const dataUrl = data.slice(4, -1).replace(/"/g, "");
+        const img = new Image();
+        img.src = dataUrl;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL();
+            const a = document.createElement('a');
+            a.href = dataURL;
+            //set file name as the current date
+            const date = new Date();
+            const dateString = date.toISOString();
+            a.download = `drawing-${dateString}.png`;
+            a.click();
+        }
+
+    });
+
+    // Toggle auto fetching the streampreview image
+    const auto_fetch_stream_preview = select('#autofetch-preview');
+    auto_fetch_stream_preview.mousePressed(() => {
+        if (autoFetching) {
+            autoFetching = false;
+            auto_fetch_stream_preview.html('Off');
+            auto_fetch_stream_preview.style('background-color', '#ff0000');
+            clearInterval(autoFetchingOnInterval);
+        }
+        else {
+            //get data-screenShotTime from body
+            const screenShotTime = document.body.dataset.time;
+            console.log(screenShotTime);
+            autoFetching = true;
+            auto_fetch_stream_preview.html('On');
+            auto_fetch_stream_preview.style('background-color', '#00ff00');
+            fetchStreamPreview();
+            autoFetchingOnInterval = setInterval(() => {
+                fetchStreamPreview();
+            }, screenShotTime);
+        }
     });
 }
 
@@ -95,3 +142,22 @@ function sendmouse(x, y, pX, pY) {
 
     socket.emit('mouse', data);
 }
+
+function fetchStreamPreview() {
+    // send socket request to the server wait for a response then set the body background to the base64 data
+    socket.emit('request-image');
+    socket.on('image', (data) => {
+        canvasElm.style.backgroundImage = `url(${data})`;
+        canvasElm.style.backgroundSize = 'contain';
+        canvasElm.style.backgroundRepeat = 'no-repeat';
+    });
+}
+
+function delay(delay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(2);
+      }, delay);
+    });
+  }
+

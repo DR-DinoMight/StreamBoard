@@ -10,7 +10,7 @@
   <script type="text/javascript" src="sketch.js"></script>
 </head>
 
-<body data-ip="{{ip}}">
+<body data-ip="{{ip}}" data-port="{{port}}" data-time="{{screenShotTime}}">
    <header>
     <label for="toggle">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -18,7 +18,7 @@
     <h1>Websockets drawing app</h1>
    </header>
     <div class="container">
-      <input id="toggle" type="checkbox" checked style="display:none"/>
+      <input id="toggle" type="checkbox"  style="display:none"/>
       <nav class="menu">
         <p>Choose color (# hex)</p>
         <input type="color" name="custom_color" placeholder="#FFFFFF" id="pickcolor" class="call-picker" />
@@ -26,9 +26,15 @@
         <p>Choose stroke width</p>
         <input type="range" name="stroke_width" placeholder="0" value="1" id="stroke-width-picker" class="stroke_width_picker" min="1" max="100" step="1" />
         <br />
+        <p>Autofetch stream preview</p>
+        <button id="autofetch-preview">Off</button>
+        <br />
         <p>Grab Stream Preview</p>
         <button id="stream-preview">Stream preview</button>
-                    <br />
+        <br />
+        <p>Save Drawing</p>
+        <button id="save-btn">Save Drawing</button>
+        <br />
         <p>Clear</p>
         <button id="clear-btn">Clear</button>
       </nav>

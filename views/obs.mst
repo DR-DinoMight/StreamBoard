@@ -10,6 +10,6 @@
   <script type="text/javascript" src="obs.js"></script>
 </head>
 
-<body data-ip="{{ip}}">
+<body data-ip="{{ip}}"  data-port="{{port}}">
 </body>
 </html>
