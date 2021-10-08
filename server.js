@@ -2,6 +2,7 @@ import http from 'http';
 import app, {config} from './app.js';
 import { Server } from "socket.io";
 import OBSWebSocket from 'obs-websocket-js';
+import 'colors';
 
 var obs = new OBSWebSocket();
 
@@ -62,7 +63,13 @@ server.on('listening', () => {
     const address = server.address();
     const bind =
         typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-    console.log('Listening on ' + bind);
+    console.log('---------------------'.blue.bold);
+    console.log('StreamBoard Connected!'.rainbow.bold);
+    console.log('Connect an OBS browser source to: '.blue + `https://localhost:${port}/obs`.green.bold.underline);
+    console.log('Draw at: '.blue + `https://localhost:${port}`.green.bold.underline);
+    console.log('---------------------'.blue.bold);
+
+    console.log('');
     if (!obs || !obs.connected) {
         connectToOBS();
     }

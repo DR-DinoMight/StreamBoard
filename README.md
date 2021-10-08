@@ -1,6 +1,8 @@
-# DrawingBoard drawing app
+
+# StreamBoard
 
 A realtime drawing app that can be used along side OBS to bring interactive whiteboard to stream
+
 
 ## Getting started
 
@@ -12,17 +14,17 @@ npm install
 
 # Run the server
 node server
+
+# Alter config.json and restart
+./config.json
+
+# Re-Run the server
+node server
+
 ```
+In OBS add new browser source (1080x1920) to URL displayed in console
 
-Start using Docker
-
-```bash
-# Building the image
-docker build --tag socketiodrawing .
-
-# Run the image in a container
-docker run -d -p 3000:3000 socketiodrawing
-```
+To draw go to the URL mentioned in the CLI
 
 ## Author
 
