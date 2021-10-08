@@ -26,7 +26,7 @@
         <p>Choose stroke width</p>
         <input type="range" name="stroke_width" placeholder="0" value="1" id="stroke-width-picker" class="stroke_width_picker" min="1" max="100" step="1" />
         <br />
-        <p>Autofetch stream preview</p>
+        <p>Auto stream preview</p>
         <button id="autofetch-preview">Off</button>
         <br />
         <p>Grab Stream Preview</p>

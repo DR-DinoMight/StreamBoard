@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Catamaran&display=swap');
+
 input.call-picker {
   text-transform: uppercase;
   float: left;
@@ -7,11 +9,6 @@ input.call-picker {
   margin-bottom: .5rem;
 }
 
-body{
-  touch-action: none;
-  overflow: hidden;
-
-}
 
 header {
   display: flex;
@@ -68,7 +65,7 @@ input.stroke_width_picker {
 p {
   margin-top: 1rem;
   margin-bottom: .5rem;
-  color: #DDD;
+  font-weight: bold;
 }
 
 button {
@@ -76,9 +73,20 @@ button {
   width: 90%;
   margin-right: 10px;
 }
+button#autofetch-preview {
+  background-color: red;
+}
 
 html, body {
   height: 100%;
-  background-color: #373d55;
-  display: block
+  display: block;
+  background-color: #0093E9;
+  background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+  font-family: 'Catamaran', sans-serif;
+  color: #CBCBD2;
+  }
+
+body{
+  touch-action: none;
+  overflow: hidden;
 }

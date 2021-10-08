@@ -3,6 +3,9 @@ import app, {config} from './app.js';
 import { Server } from "socket.io";
 import OBSWebSocket from 'obs-websocket-js';
 import 'colors';
+import ip from 'ip'
+
+const localIp = ip.address()
 
 var obs = new OBSWebSocket();
 
@@ -65,8 +68,8 @@ server.on('listening', () => {
         typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
     console.log('---------------------'.blue.bold);
     console.log('StreamBoard Connected!'.rainbow.bold);
-    console.log('Connect an OBS browser source to: '.blue + `https://localhost:${port}/obs`.green.bold.underline);
-    console.log('Draw at: '.blue + `https://localhost:${port}`.green.bold.underline);
+    console.log('Connect an OBS browser source to: '.blue + `http://${localIp}:${port}/obs`.green.bold);
+    console.log('Draw at: '.blue + `http://${localIp}:${port}`.green.bold);
     console.log('---------------------'.blue.bold);
 
     console.log('');
@@ -102,7 +105,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('clear', () => {
-        console.log('Clearning');
+        console.log('Clearing');
         socket.broadcast.emit('clear');
     })
 
@@ -126,7 +129,6 @@ const getStreamPreview = (socket) => {
     })
     .catch(err => {
         console.log('Failed to take screenshot');
-        console.log(err);
     })
 }
 
