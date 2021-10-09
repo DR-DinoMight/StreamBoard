@@ -6,7 +6,6 @@
   <title>Websockets drawing app</title>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.1/socket.io.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.3.1/p5.min.js"></script>
-  <script src="pouchdb-7.2.1.min.js"></script>
   <script type="text/javascript" src="obs.js"></script>
 </head>
 

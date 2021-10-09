@@ -30,6 +30,7 @@
   },
   "bin": "./server.js",
   "pkg": {
+    "options": ["experimental-modules"],
     "scripts": [
       "./server.js",
       "./app.js"

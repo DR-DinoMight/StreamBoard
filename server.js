@@ -9,6 +9,9 @@ const localIp = ip.address()
 
 var obs = new OBSWebSocket();
 
+var data = [];
+
+
 // Try to connect to the obs websocket server, if not  retry the connection every 5 seconds until connected.
 const connectToOBS = () => {
 
@@ -92,6 +95,11 @@ const io = new Server(server, {
 io.sockets.on('connection', (socket) => {
     console.log('Client connected: ' + socket.id);
 
+
+    socket.on('obs_connection', () => {
+        socket.emit('snapshot', {...data} );
+    });
+
     socket.on('mouse', (data) => {
         //get epoch time
         const time = new Date().getTime();
@@ -107,12 +115,23 @@ io.sockets.on('connection', (socket) => {
     socket.on('clear', () => {
         console.log('Clearing');
         socket.broadcast.emit('clear');
+        data = [];
     })
 
     socket.on('disconnect', () => console.log('Client has disconnected'));
+
+    socket.on('snapshot', clientData => {
+        data[socket.id] = clientData.data;
+    })
+
+    // on undo event broadcast the data to all clients except the one who sent the undo event
+    socket.on('undo', (snapshotData) => {
+        data[socket.id] = snapshotData.data;
+        socket.broadcast.emit('undo', {...data})
+    })
 });
 
-// //every 30 seconds emit background to all connected clients
+// //every 30 seconds emit background to all connected  clients
 // setInterval(() => {
 //     getStreamPreview();
 // }, 3000);

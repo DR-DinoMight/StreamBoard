@@ -38,17 +38,26 @@ header label:hover{
   overflow: hidden;
 }
 
+nav.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: .5rem;
+}
+
 /* Checkbox hack to toggle nav visibility */
 #toggle:checked ~ nav {
-  margin-left: -15em;
+  display:flex;
 }
 #toggle ~ nav {
-  margin-left: 0;
+  display: none;
 }
 
 #canvas {
   flex: 1;
   max-width: 960px;
+  touch-action: none;
+  overflow: hidden;
 }
 
 input.stroke_width_picker {
@@ -63,13 +72,13 @@ input.stroke_width_picker {
 }
 
 p {
-  margin-top: 1rem;
+  margin-top: .5rem;
   margin-bottom: .5rem;
   font-weight: bold;
 }
 
 button {
-  height: 3rem;
+  height: 2rem;
   width: 90%;
   margin-right: 10px;
 }
@@ -86,7 +95,3 @@ html, body {
   color: #CBCBD2;
   }
 
-body{
-  touch-action: none;
-  overflow: hidden;
-}

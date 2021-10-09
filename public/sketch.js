@@ -9,6 +9,9 @@ let canvasElm;
 let autoFetching = false;
 let autoFetchingOnInterval;
 
+let data = [];
+let mousePressedData = [];
+
 function setup() {
     // db = new PouchDB('sketch');
     // Creating canvas
@@ -43,13 +46,12 @@ function setup() {
     });
 
     socket.on('clear', (data) => {
-        console.log('received clear');
         cv.clear();
     });
 
     const stream_preview = select('#stream-preview');
     stream_preview.mousePressed(() => {
-        fetchStreamPreview()
+        fetchStreamPreview();
     });
 
     const clear_btn = select('#clear-btn');
@@ -58,12 +60,24 @@ function setup() {
         cv.clear();
     });
 
+    const undo_btn = select('#undo-btn');
+    undo_btn.mousePressed(() => {
+        undo();
+    });
+
+    //on keyboard event ctrl+z call undo function
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 90 && e.ctrlKey) {
+            undo();
+        }
+    });
+
     const save_btn = select('#save-btn');
     save_btn.mousePressed(() => {
         fetchStreamPreview();
         //get the background image style from canvasElm and save as a png
         const data = canvasElm.style.backgroundImage;
-        const dataUrl = data.slice(4, -1).replace(/"/g, "");
+        const dataUrl = data.slice(4, -1).replace(/"/g, '');
         const img = new Image();
         img.src = dataUrl;
         img.onload = () => {
@@ -80,8 +94,7 @@ function setup() {
             const dateString = date.toISOString();
             a.download = `drawing-${dateString}.png`;
             a.click();
-        }
-
+        };
     });
 
     // Toggle auto fetching the streampreview image
@@ -92,11 +105,9 @@ function setup() {
             auto_fetch_stream_preview.html('Off');
             auto_fetch_stream_preview.style('background-color', '#ff0000');
             clearInterval(autoFetchingOnInterval);
-        }
-        else {
+        } else {
             //get data-screenShotTime from body
             const screenShotTime = document.body.dataset.time;
-            console.log(screenShotTime);
             autoFetching = true;
             auto_fetch_stream_preview.html('On');
             auto_fetch_stream_preview.style('background-color', '#00ff00');
@@ -115,18 +126,67 @@ function centerCanvas() {
 }
 
 function mouseDragged() {
-    const stroke_width_picker = select('#stroke-width-picker');
-    const width = parseInt(stroke_width_picker.value());
-    strokeWidth = width > 0 ? width : 1;
-    const color_picker = select('#pickcolor');
-    color = color_picker.value();
-    // Draw
-    stroke(color);
-    strokeWeight(strokeWidth / 2);
-    line(mouseX, mouseY, pmouseX, pmouseY);
+    // only action if mouse is on the canvas
+    if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+        const stroke_width_picker = select('#stroke-width-picker');
+        const width = parseInt(stroke_width_picker.value());
+        strokeWidth = width > 0 ? width : 1;
+        const color_picker = select('#pickcolor');
+        color = color_picker.value();
+        // Draw
+        stroke(color);
+        strokeWeight(strokeWidth);
+        line(mouseX, mouseY, pmouseX, pmouseY);
 
-    // Send the mouse coordinates
-    sendmouse(mouseX * 2, mouseY * 2, pmouseX * 2, pmouseY * 2);
+        // Send the mouse coordinates
+        sendmouse(mouseX, mouseY, pmouseX, pmouseY);
+
+        // store the mouse movements to data arrays
+        mousePressedData.push({
+            x: mouseX,
+            y: mouseY,
+            px: pmouseX,
+            py: pmouseY,
+            color: color,
+            strokeWidth: strokeWidth,
+        });
+    }
+}
+
+//on mouseReleased send the mousePressedData as a single snapshot to the data array
+function mouseReleased() {
+    if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+        data.push(mousePressedData);
+        //empty the mousePressedData array
+        mousePressedData = [];
+
+        //send snapshot to everyone
+        socket.emit('snapshot', {
+            data: data,
+        });
+    }
+}
+
+//create a undo system for canvas that undo everything taken place from mouse click to released mouse
+// and emit a undo event with the data as well as show the result on the canvas
+function undo() {
+    if (data.length > 0) {
+        //remove the last data from the data array
+        data.pop();
+        socket.emit('undo', {
+            data: data,
+        });
+        //clear the canvas
+        cv.clear();
+        //loop through the data array and draw the data
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[i].length; j++) {
+                stroke(data[i][j].color);
+                strokeWeight(data[i][j].strokeWidth);
+                line(data[i][j].x, data[i][j].y, data[i][j].px, data[i][j].py);
+            }
+        }
+    }
 }
 
 // Sending data to the socket
@@ -154,10 +214,9 @@ function fetchStreamPreview() {
 }
 
 function delay(delay) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(2);
-      }, delay);
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(2);
+        }, delay);
     });
-  }
-
+}

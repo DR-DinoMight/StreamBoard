@@ -20,23 +20,31 @@
     <div class="container">
       <input id="toggle" type="checkbox"  style="display:none"/>
       <nav class="menu">
-        <p>Choose color (# hex)</p>
-        <input type="color" name="custom_color" placeholder="#FFFFFF" id="pickcolor" class="call-picker" />
-        <br />
+        <div class="">
+          <p>Choose color (# hex)</p>
+          <input type="color" name="custom_color" placeholder="#FFFFFF" id="pickcolor" class="call-picker" />
+        </div>
+        <div class="">
         <p>Choose stroke width</p>
         <input type="range" name="stroke_width" placeholder="0" value="1" id="stroke-width-picker" class="stroke_width_picker" min="1" max="100" step="1" />
-        <br />
+        </div>
+        <div class="">
         <p>Auto stream preview</p>
         <button id="autofetch-preview">Off</button>
-        <br />
-        <p>Grab Stream Preview</p>
+                </div>
+        <div class="">
         <button id="stream-preview">Stream preview</button>
-        <br />
-        <p>Save Drawing</p>
+                </div>
+        <div class="">
         <button id="save-btn">Save Drawing</button>
-        <br />
-        <p>Clear</p>
+                </div>
+        <div class="">
         <button id="clear-btn">Clear</button>
+                </div>
+                        <div class="">
+        <button id="undo-btn">Undo</button>
+                </div>
+
       </nav>
       <div id="canvas">
       </div>
